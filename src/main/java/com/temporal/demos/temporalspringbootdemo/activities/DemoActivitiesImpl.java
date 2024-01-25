@@ -5,15 +5,37 @@ import io.temporal.spring.boot.ActivityImpl;
 import org.springframework.stereotype.Component;
 
 @Component
-@ActivityImpl(taskQueues = "DemoTaskQueue")
+@ActivityImpl(taskQueues = "OrderWorkflowTaskQueue")
 public class DemoActivitiesImpl implements DemoActivities {
     @Override
     public void before(CloudEvent cloudEvent) {
+        System.out.println("Inside DemoActivitiesImpl.before()");
         // todo
     }
 
     @Override
     public void after(CloudEvent cloudEvent) {
+        System.out.println("Inside DemoActivitiesImpl.after()");
         // todo
     }
+
+    @Override
+    public void addOrder(String orderId) {
+        System.out.println("Inside DemoActivitiesImpl.addOrder(): "+orderId);
+        // todo
+    }
+
+    @Override
+    public void approveOrder(String orderId) {
+        System.out.println("Inside DemoActivitiesImpl.approveOrder(): "+orderId);
+        // todo
+      }
+
+    @Override
+    public void completeOrder(String orderId) {
+        System.out.println("Inside DemoActivitiesImpl.completeOrder(): "+orderId);
+        // todo
+    }
+
+
 }

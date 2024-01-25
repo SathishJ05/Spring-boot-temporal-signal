@@ -8,12 +8,18 @@ import io.temporal.workflow.WorkflowMethod;
 
 @WorkflowInterface
 public interface DemoWorkflow {
+
+    //CloudEvent exec(CloudEvent cloudEvent);
+
     @WorkflowMethod
-    CloudEvent exec(CloudEvent cloudEvent);
+    String execOrder(String orderId);
 
     @SignalMethod
-    void addEvent(CloudEvent cloudEvent);
+    void orderStatus(String orderId);
 
-    @QueryMethod
-    CloudEvent getLastEvent();
+    // SignalMethod
+   // void orderStatus(CloudEvent cloudEvent);
+
+    /*@QueryMethod
+    CloudEvent getLastEvent();*/
 }

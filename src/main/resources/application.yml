@@ -9,15 +9,6 @@ server:
 spring:
   application:
     name: temporal-demo
-  sleuth:
-    otel:
-      config:
-        trace-id-ratio-based: 1
-      exporter:
-        otlp:
-          endpoint: http://127.0.0.1:4317
-    propagation:
-      type: W3C
   temporal:
     connection:
       target: 127.0.0.1:7233

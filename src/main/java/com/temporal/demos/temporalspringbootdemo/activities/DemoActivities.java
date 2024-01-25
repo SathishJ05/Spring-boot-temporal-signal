@@ -7,4 +7,10 @@ import io.temporal.activity.ActivityInterface;
 public interface DemoActivities {
     void before(CloudEvent cloudEvent);
     void after(CloudEvent cloudEvent);
+
+    void addOrder(String orderId);
+
+    void approveOrder(String orderId);
+
+    void completeOrder(String orderId);
 }

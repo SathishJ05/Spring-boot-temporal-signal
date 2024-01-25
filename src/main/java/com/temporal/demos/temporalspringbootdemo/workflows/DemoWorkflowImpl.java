@@ -1,26 +1,21 @@
 package com.temporal.demos.temporalspringbootdemo.workflows;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.temporal.demos.temporalspringbootdemo.activities.DemoActivities;
 import io.cloudevents.CloudEvent;
-import io.cloudevents.core.builder.CloudEventBuilder;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.spring.boot.WorkflowImpl;
+import io.temporal.workflow.ExternalWorkflowStub;
 import io.temporal.workflow.Workflow;
 
-import java.net.URI;
-import java.nio.charset.Charset;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-@WorkflowImpl(taskQueues = "DemoTaskQueue")
+@WorkflowImpl(taskQueues = "OrderWorkflowTaskQueue")
 public class DemoWorkflowImpl implements DemoWorkflow {
 
-    private List<CloudEvent> eventList = new ArrayList<>();
+    //private List<CloudEvent> eventList = new ArrayList<>();
+    private String OrderStatus=null;
 
     private DemoActivities demoActivities =
             Workflow.newActivityStub(DemoActivities.class,
@@ -28,7 +23,7 @@ public class DemoWorkflowImpl implements DemoWorkflow {
                             .setStartToCloseTimeout(Duration.ofSeconds(2))
                             .build());
 
-    @Override // WorkflowMethod
+   /* @Override // WorkflowMethod
     public CloudEvent exec(CloudEvent cloudEvent) {
         eventList.add(cloudEvent);
 
@@ -58,15 +53,31 @@ public class DemoWorkflowImpl implements DemoWorkflow {
                                 .getBytes(Charset.defaultCharset()))
                 .build();
 
+    }*/
+
+    @Override
+    public String execOrder(String orderId) {
+        demoActivities.addOrder(orderId);
+        // wait for bulk requester complete signal
+        Workflow.await(() -> OrderStatus != null);
+        demoActivities.approveOrder(orderId);
+        demoActivities.completeOrder(orderId);
+        return OrderStatus;
     }
 
     @Override // SignalMethod
-    public void addEvent(CloudEvent cloudEvent) {
-        eventList.add(cloudEvent);
+    public void orderStatus(String orderId) {
+        System.out.println("Signal Successful...");
+        OrderStatus = "Approved";
     }
 
-    @Override // QueryMethod
+    /*@Override
+    public void orderStatus(CloudEvent cloudEvent) {
+
+    }*/
+
+    /*@Override // QueryMethod
     public CloudEvent getLastEvent() {
         return eventList.get(eventList.size() - 1);
-    }
+    }*/
 }
