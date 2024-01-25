@@ -9,17 +9,11 @@ import io.temporal.workflow.WorkflowMethod;
 @WorkflowInterface
 public interface DemoWorkflow {
 
-    //CloudEvent exec(CloudEvent cloudEvent);
-
     @WorkflowMethod
     String execOrder(String orderId);
 
     @SignalMethod
     void orderStatus(String orderId);
 
-    // SignalMethod
-   // void orderStatus(CloudEvent cloudEvent);
 
-    /*@QueryMethod
-    CloudEvent getLastEvent();*/
 }

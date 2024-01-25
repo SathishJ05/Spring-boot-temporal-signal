@@ -5,8 +5,6 @@ import io.temporal.activity.ActivityInterface;
 
 @ActivityInterface
 public interface DemoActivities {
-    void before(CloudEvent cloudEvent);
-    void after(CloudEvent cloudEvent);
 
     void addOrder(String orderId);
 
