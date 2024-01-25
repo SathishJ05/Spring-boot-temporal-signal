@@ -25,17 +25,24 @@ public class DemoWorkflowImpl implements DemoWorkflow {
 
     @Override
     public String execOrder(String orderId) {
+
+        //Creating the Order.
         demoActivities.addOrder(orderId);
-        // wait for bulk requester complete signal
+
+        //Waiting for Signal.
         Workflow.await(() -> OrderStatus != null);
+
+        //Approving the Order.
         demoActivities.approveOrder(orderId);
+
+        //Completing the Order.
         demoActivities.completeOrder(orderId);
         return OrderStatus;
     }
 
     @Override // SignalMethod
     public void orderStatus(String orderId) {
-        System.out.println("Signal Successful...");
+        System.out.println("Approving the Order: "+orderId+" by the Signal.");
         OrderStatus = "Approved";
     }
 
