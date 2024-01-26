@@ -15,7 +15,7 @@ import java.util.List;
 public class DemoWorkflowImpl implements DemoWorkflow {
 
     //private List<CloudEvent> eventList = new ArrayList<>();
-    private String OrderStatus=null;
+    private String OrderStatus="Started";
 
     private DemoActivities demoActivities =
             Workflow.newActivityStub(DemoActivities.class,
@@ -30,10 +30,12 @@ public class DemoWorkflowImpl implements DemoWorkflow {
         demoActivities.addOrder(orderId);
 
         //Waiting for Signal.
-        Workflow.await(() -> OrderStatus != null);
+        Workflow.await(() -> OrderStatus != "Started");
 
         //Approving the Order.
         demoActivities.approveOrder(orderId);
+
+        Workflow.await(() -> OrderStatus != "Approved");
 
         //Completing the Order.
         demoActivities.completeOrder(orderId);
@@ -44,6 +46,18 @@ public class DemoWorkflowImpl implements DemoWorkflow {
     public void orderStatus(String orderId) {
         System.out.println("Approving the Order: "+orderId+" by the Signal.");
         OrderStatus = "Approved";
+    }
+
+    @Override
+    public void fulfillOrder(String orderId) {
+        System.out.println("Fulfilling the Order: "+orderId+" by the Signal.");
+        OrderStatus = "Fulfilled";
+    }
+
+    @Override
+    public String getStatus(String orderId) {
+        System.out.println("Querying the Order: "+orderId+" by the query.");
+        return OrderStatus;
     }
 
 }

@@ -15,5 +15,10 @@ public interface DemoWorkflow {
     @SignalMethod
     void orderStatus(String orderId);
 
+    @SignalMethod
+    void fulfillOrder(String orderId);
+
+    @QueryMethod
+    String getStatus(String orderId);
 
 }

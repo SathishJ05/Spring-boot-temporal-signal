@@ -56,4 +56,28 @@ public class OrderAPI {
 
         return orderId+" : Approved Successfully...";
     }
+
+    @GetMapping("/fulfillOrder")
+    public String fulfillOrder(@RequestParam("orderId") String orderId) {
+
+        WorkflowStub workflow =  workflowClient.newUntypedWorkflowStub("Order-Workflow-"+orderId);
+
+        logger.info("Calling fulfillOrder workflow");
+        workflow.signal("fulfillOrder" , orderId);
+        logger.info("Workflow fulfillOrder success");
+
+        return orderId+" : Approved Successfully...";
+    }
+
+    @GetMapping("/getOrderStatus")
+    public String getOrderStatus(@RequestParam("orderId") String orderId) {
+
+        WorkflowStub workflow =  workflowClient.newUntypedWorkflowStub("Order-Workflow-"+orderId);
+
+        logger.info("Calling getOrderStatus workflow");
+        String status = workflow.query("getStatus", String.class, orderId);
+        logger.info("Workflow getOrderStatus success");
+
+        return status;
+    }
 }
